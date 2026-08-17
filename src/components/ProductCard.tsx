@@ -1,19 +1,21 @@
 "use client";
 
 import { judgementMap, stars } from "@/lib/judgement";
+import { getProductJudgement } from "@/lib/productJudgement";
 import { trackEvent } from "@/lib/analytics";
-import type { FamilySize, Product } from "@/types";
+import type { FamilySize, OverallJudgementLevel, Product } from "@/types";
 
 const RANK_MEDAL: Record<number, string> = { 1: "🥇", 2: "🥈", 3: "🥉" };
 
 interface Props {
   product: Product;
   familySize: FamilySize;
+  overallLevel: OverallJudgementLevel;
   rank?: number;
 }
 
-export default function ProductCard({ product, familySize, rank }: Props) {
-  const judgement = judgementMap[product.judgement];
+export default function ProductCard({ product, familySize, overallLevel, rank }: Props) {
+  const judgement = judgementMap[getProductJudgement(product.priority, overallLevel)];
 
   const handleCardClick = () => {
     trackEvent("product_click", { item_id: product.id, item_name: product.name });

@@ -1,13 +1,14 @@
 import { products } from "@/data/products";
-import type { FamilySize } from "@/types";
+import type { FamilySize, OverallJudgementLevel } from "@/types";
 import ProductCard from "./ProductCard";
 
 interface Props {
   familySize: FamilySize;
   categoryId: string | null;
+  overallLevel: OverallJudgementLevel;
 }
 
-export default function ProductList({ familySize, categoryId }: Props) {
+export default function ProductList({ familySize, categoryId, overallLevel }: Props) {
   const filtered = categoryId
     ? products.filter((p) => p.category === categoryId)
     : products;
@@ -20,7 +21,12 @@ export default function ProductList({ familySize, categoryId }: Props) {
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {filtered.map((product) => (
-            <ProductCard key={product.id} product={product} familySize={familySize} />
+            <ProductCard
+              key={product.id}
+              product={product}
+              familySize={familySize}
+              overallLevel={overallLevel}
+            />
           ))}
         </div>
       )}

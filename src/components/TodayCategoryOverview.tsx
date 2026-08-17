@@ -1,8 +1,14 @@
 import { categories } from "@/data/categories";
 import { products } from "@/data/products";
 import { compactJudgement } from "@/lib/judgement";
+import { getProductJudgement } from "@/lib/productJudgement";
+import type { OverallJudgementLevel } from "@/types";
 
-export default function TodayCategoryOverview() {
+interface Props {
+  overallLevel: OverallJudgementLevel;
+}
+
+export default function TodayCategoryOverview({ overallLevel }: Props) {
   return (
     <section>
       <h2 className="mb-3 text-xl font-bold text-gray-900">今日のおすすめ</h2>
@@ -10,7 +16,7 @@ export default function TodayCategoryOverview() {
         {categories.map((cat) => {
           const product = products.find((p) => p.category === cat.id);
           if (!product) return null;
-          const compact = compactJudgement(product.judgement);
+          const compact = compactJudgement(getProductJudgement(product.priority, overallLevel));
           return (
             <div
               key={cat.id}

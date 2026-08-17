@@ -11,11 +11,13 @@ import ProductList from "@/components/ProductList";
 import CautionSection from "@/components/CautionSection";
 import AffiliateNotice from "@/components/AffiliateNotice";
 import { trackEvent } from "@/lib/analytics";
+import { useTodayJudgement } from "@/lib/useTodayJudgement";
 import type { FamilySize } from "@/types";
 
 export default function Home() {
   const [familySize, setFamilySize] = useState<FamilySize>("2");
   const [categoryId, setCategoryId] = useState<string | null>(null);
+  const { result, candidates, dateLabel } = useTodayJudgement();
 
   const handleFamilySizeChange = (value: FamilySize) => {
     setFamilySize(value);
@@ -34,19 +36,19 @@ export default function Home() {
         <h1 className="sr-only">今日、楽天で買いだめするべきか判定するサイト</h1>
       </header>
 
-      <HeroJudgement />
+      <HeroJudgement result={result} candidates={candidates} dateLabel={dateLabel} />
 
-      <EventBanner />
+      <EventBanner result={result} />
 
       <FamilySizeSelector value={familySize} onChange={handleFamilySizeChange} />
 
-      <TopThree familySize={familySize} />
+      <TopThree familySize={familySize} overallLevel={result.level} />
 
-      <TodayCategoryOverview />
+      <TodayCategoryOverview overallLevel={result.level} />
 
       <CategoryFilter value={categoryId} onChange={handleCategoryChange} />
 
-      <ProductList familySize={familySize} categoryId={categoryId} />
+      <ProductList familySize={familySize} categoryId={categoryId} overallLevel={result.level} />
 
       <CautionSection />
 

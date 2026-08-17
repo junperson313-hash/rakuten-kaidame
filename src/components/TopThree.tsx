@@ -1,12 +1,13 @@
 import { products } from "@/data/products";
-import type { FamilySize } from "@/types";
+import type { FamilySize, OverallJudgementLevel } from "@/types";
 import ProductCard from "./ProductCard";
 
 interface Props {
   familySize: FamilySize;
+  overallLevel: OverallJudgementLevel;
 }
 
-export default function TopThree({ familySize }: Props) {
+export default function TopThree({ familySize, overallLevel }: Props) {
   const top3 = [...products]
     .filter((p) => p.topRank)
     .sort((a, b) => (a.topRank ?? 99) - (b.topRank ?? 99));
@@ -24,6 +25,7 @@ export default function TopThree({ familySize }: Props) {
             key={product.id}
             product={product}
             familySize={familySize}
+            overallLevel={overallLevel}
             rank={product.topRank}
           />
         ))}
