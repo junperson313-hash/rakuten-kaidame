@@ -12,7 +12,7 @@ export default function FamilySizeSelector({ value, onChange }: Props) {
   return (
     <section className="rounded-2xl border border-gray-200 bg-white p-4">
       <h2 className="mb-3 text-base font-bold text-gray-800">何人暮らしですか？</h2>
-      <div className="grid grid-cols-5 gap-1.5">
+      <div className="grid grid-cols-4 gap-1.5">
         {familySizeOptions.map((opt) => {
           const active = opt.value === value;
           return (

@@ -39,3 +39,33 @@ export function stars(score: number): string {
   const empty = "☆".repeat(5 - score);
   return filled + empty;
 }
+
+interface CompactJudgementInfo {
+  label: string;
+  icon: string;
+  cardClass: string;
+}
+
+// カテゴリ一覧などスペースが限られる場所向けの3段階表示（買い / 条件次第 / 待ち）。
+// アイコン・文字・色の3つで判定できるようにし、色だけに依存しないようにしている。
+export function compactJudgement(level: JudgementLevel): CompactJudgementInfo {
+  if (level === "buy_today" || level === "ok") {
+    return {
+      label: "買い",
+      icon: "✅",
+      cardClass: "border-red-200 bg-red-50 text-red-700",
+    };
+  }
+  if (level === "depends") {
+    return {
+      label: "条件次第",
+      icon: "⚠️",
+      cardClass: "border-amber-200 bg-amber-50 text-amber-700",
+    };
+  }
+  return {
+    label: "待ち",
+    icon: "⏸️",
+    cardClass: "border-blue-200 bg-blue-50 text-blue-700",
+  };
+}

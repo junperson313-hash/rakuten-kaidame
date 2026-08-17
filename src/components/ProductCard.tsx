@@ -58,6 +58,10 @@ export default function ProductCard({ product, familySize, rank }: Props) {
           <span>変動 {stars(product.priceVolatility)}</span>
         </div>
 
+        <p className="mb-2 text-sm font-bold leading-relaxed text-gray-800">
+          💡 なぜ{judgement.label}？ {product.reason}
+        </p>
+
         <p className="mb-3 rounded-xl bg-gray-50 p-3 text-sm leading-relaxed text-gray-700">
           {product.comment}
         </p>

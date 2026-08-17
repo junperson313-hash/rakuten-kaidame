@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import HeroJudgement from "@/components/HeroJudgement";
 import EventBanner from "@/components/EventBanner";
 import FamilySizeSelector from "@/components/FamilySizeSelector";
 import TopThree from "@/components/TopThree";
+import TodayCategoryOverview from "@/components/TodayCategoryOverview";
 import CategoryFilter from "@/components/CategoryFilter";
 import ProductList from "@/components/ProductList";
 import CautionSection from "@/components/CautionSection";
@@ -29,16 +31,18 @@ export default function Home() {
     <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 px-4 py-6">
       <header className="text-center">
         <p className="text-sm font-bold text-red-600">楽天 買いだめ判定</p>
-        <h1 className="mt-1 text-2xl font-extrabold leading-snug text-gray-900">
-          今日、買いだめしていいもの
-        </h1>
+        <h1 className="sr-only">今日、楽天で買いだめするべきか判定するサイト</h1>
       </header>
+
+      <HeroJudgement />
 
       <EventBanner />
 
       <FamilySizeSelector value={familySize} onChange={handleFamilySizeChange} />
 
       <TopThree familySize={familySize} />
+
+      <TodayCategoryOverview />
 
       <CategoryFilter value={categoryId} onChange={handleCategoryChange} />
 
