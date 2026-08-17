@@ -12,4 +12,8 @@ export const categories: Category[] = [
   { id: "rice", name: "お米", icon: "🍚" },
   { id: "diaper", name: "おむつ", icon: "👶" },
   { id: "pet", name: "ペット用品", icon: "🐾" },
+  { id: "snacks", name: "お菓子", icon: "🍪" },
+  { id: "coffee", name: "コーヒー", icon: "☕" },
+  { id: "alcohol", name: "お酒", icon: "🍶" },
+  { id: "wine", name: "ワイン", icon: "🍷" },
 ];
