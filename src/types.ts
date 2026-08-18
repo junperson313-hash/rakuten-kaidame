@@ -8,7 +8,7 @@ export interface FamilySizeOption {
 }
 
 // サイト全体としての「今日、買いだめすべきか」の総合判定。
-// isGotobi / isKanshaDay / activeCampaigns は日付とキャンペーンデータから自動計算する。
+// isGotobi / isKanshaDay / isWonderfulDay / activeCampaigns は日付とキャンペーンデータから自動計算する。
 export type OverallJudgementLevel = "buy" | "depends" | "wait";
 
 export interface OverallJudgementResult {
@@ -16,7 +16,17 @@ export interface OverallJudgementResult {
   reason: string; // 判定理由（1〜2行）
   isGotobi: boolean; // 今日が5と0のつく日か
   isKanshaDay: boolean; // 今日が18日(ご愛顧感謝デー)か
+  isWonderfulDay: boolean; // 今日が1日(ワンダフルデー)か
   activeCampaigns: RakutenCampaign[]; // 現在開催中と確認できているキャンペーン
+}
+
+// 毎月固定の楽天イベント(ご愛顧感謝デー・ワンダフルデーなど)の参加条件情報。
+// 楽天公式ページで確認できた事実のみを記載し、断定しすぎない文言にすること。
+export interface FixedMonthlyEventInfo {
+  name: string;
+  conditionSummary: string; // 会員ランク等の条件・ポイント倍率の事実（断定しすぎない書き方）
+  requiresEntry: boolean;
+  officialUrl: string;
 }
 
 export interface NextBuyCandidate {

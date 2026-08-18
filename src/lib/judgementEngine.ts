@@ -1,3 +1,4 @@
+import { kanshaDayInfo, wonderfulDayInfo } from "@/data/rakuten-events";
 import type { NextBuyCandidate, OverallJudgementResult, RakutenCampaign } from "@/types";
 import {
   formatJstShortDateLabel,
@@ -8,6 +9,7 @@ import {
 } from "@/lib/date";
 
 const KANSHA_DAY = 18; // 毎月18日: ご愛顧感謝デー(会員ランク等の条件付き)
+const WONDERFUL_DAY = 1; // 毎月1日: ワンダフルデー(要エントリー、購入金額条件あり)
 
 export function getActiveCampaigns(campaigns: RakutenCampaign[], now: Date): RakutenCampaign[] {
   const time = now.getTime();
@@ -18,6 +20,8 @@ export function getActiveCampaigns(campaigns: RakutenCampaign[], now: Date): Rak
 
 // 「今日、買いだめすべきか」の総合判定。
 // 確認できていない情報からは「買い」と判定しない(不明な場合は depends/wait 側に倒す)。
+// 固定イベント(5と0のつく日・ご愛顧感謝デー・ワンダフルデー)は単独では「条件次第」までとし、
+// 確認済みキャンペーンと重なったときだけ「買い」に強く倒す。
 export function computeOverallJudgement(
   now: Date,
   campaigns: RakutenCampaign[],
@@ -25,25 +29,30 @@ export function computeOverallJudgement(
   const { day } = getJstParts(now);
   const isGotobi = isGotobiDay(day);
   const isKanshaDay = day === KANSHA_DAY;
+  const isWonderfulDay = day === WONDERFUL_DAY;
   const activeCampaigns = getActiveCampaigns(campaigns, now);
   const campaignNames = activeCampaigns.map((c) => c.name).join("・");
+  const hasCampaign = activeCampaigns.length > 0;
+  const hasSpecialDay = isGotobi || isKanshaDay || isWonderfulDay;
 
-  if (activeCampaigns.length > 0 && isGotobi) {
+  if (hasCampaign && hasSpecialDay) {
     return {
       level: "buy",
-      reason: `${campaignNames}開催中で、5と0のつく日とも重なっています。ポイント倍率が上がりやすいタイミングです。`,
+      reason: `${campaignNames}開催中で、ポイントアップイベントとも重なっています。複数の条件が揃っているタイミングです。`,
       isGotobi,
       isKanshaDay,
+      isWonderfulDay,
       activeCampaigns,
     };
   }
 
-  if (activeCampaigns.length > 0) {
+  if (hasCampaign) {
     return {
       level: "depends",
       reason: `${campaignNames}開催中です。他の条件と重なっていないため、ポイント条件を確認してから購入しましょう。`,
       isGotobi,
       isKanshaDay,
+      isWonderfulDay,
       activeCampaigns,
     };
   }
@@ -55,6 +64,7 @@ export function computeOverallJudgement(
         "5と0のつく日です。大型キャンペーンとの重なりは確認できていないため、ポイント条件を確認してから購入しましょう。",
       isGotobi,
       isKanshaDay,
+      isWonderfulDay,
       activeCampaigns,
     };
   }
@@ -62,9 +72,21 @@ export function computeOverallJudgement(
   if (isKanshaDay) {
     return {
       level: "depends",
-      reason: "今日はご愛顧感謝デー。対象会員はキャンペーン条件を確認してください。",
+      reason: `今日は${kanshaDayInfo.name}です。${kanshaDayInfo.conditionSummary}`,
       isGotobi,
       isKanshaDay,
+      isWonderfulDay,
+      activeCampaigns,
+    };
+  }
+
+  if (isWonderfulDay) {
+    return {
+      level: "depends",
+      reason: `今日は${wonderfulDayInfo.name}です。${wonderfulDayInfo.conditionSummary}`,
+      isGotobi,
+      isKanshaDay,
+      isWonderfulDay,
       activeCampaigns,
     };
   }
@@ -74,6 +96,7 @@ export function computeOverallJudgement(
     reason: "現在確認できているポイントアップイベントは特にありません。急ぎでなければ次の買い時まで待つのがおすすめです。",
     isGotobi,
     isKanshaDay,
+    isWonderfulDay,
     activeCampaigns,
   };
 }

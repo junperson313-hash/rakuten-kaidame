@@ -3,13 +3,14 @@
 import { useSyncExternalStore } from "react";
 import { rakutenCampaigns } from "@/data/rakuten-events";
 import { computeOverallJudgement, getNextBuyCandidates } from "@/lib/judgementEngine";
-import { formatJstFullDateLabel } from "@/lib/date";
+import { formatJstFullDateLabel, getJstParts, isBousaiSeason } from "@/lib/date";
 import type { NextBuyCandidate, OverallJudgementResult } from "@/types";
 
 interface TodayJudgementState {
   result: OverallJudgementResult;
   candidates: NextBuyCandidate[];
   dateLabel: string | null;
+  isBousaiSeason: boolean;
 }
 
 // このページは静的に生成されるため、ビルド時刻をそのまま「今日」として使うと日付がズレる。
@@ -21,10 +22,12 @@ const SAFE_DEFAULT_STATE: TodayJudgementState = {
     reason: "情報を確認しています。少しお待ちください。",
     isGotobi: false,
     isKanshaDay: false,
+    isWonderfulDay: false,
     activeCampaigns: [],
   },
   candidates: [],
   dateLabel: null,
+  isBousaiSeason: false,
 };
 
 let cachedSnapshot: TodayJudgementState | null = null;
@@ -40,6 +43,7 @@ function getSnapshot(): TodayJudgementState {
       result: computeOverallJudgement(now, rakutenCampaigns),
       candidates: getNextBuyCandidates(now, rakutenCampaigns),
       dateLabel: formatJstFullDateLabel(now),
+      isBousaiSeason: isBousaiSeason(getJstParts(now)),
     };
   }
   return cachedSnapshot;

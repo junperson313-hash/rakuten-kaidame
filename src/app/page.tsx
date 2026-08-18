@@ -3,6 +3,7 @@
 import { useState } from "react";
 import HeroJudgement from "@/components/HeroJudgement";
 import EventBanner from "@/components/EventBanner";
+import BousaiNotice from "@/components/BousaiNotice";
 import FamilySizeSelector from "@/components/FamilySizeSelector";
 import TopThree from "@/components/TopThree";
 import TodayCategoryOverview from "@/components/TodayCategoryOverview";
@@ -17,7 +18,7 @@ import type { FamilySize } from "@/types";
 export default function Home() {
   const [familySize, setFamilySize] = useState<FamilySize>("2");
   const [categoryId, setCategoryId] = useState<string | null>(null);
-  const { result, candidates, dateLabel } = useTodayJudgement();
+  const { result, candidates, dateLabel, isBousaiSeason } = useTodayJudgement();
 
   const handleFamilySizeChange = (value: FamilySize) => {
     setFamilySize(value);
@@ -39,6 +40,8 @@ export default function Home() {
       <HeroJudgement result={result} candidates={candidates} dateLabel={dateLabel} />
 
       <EventBanner result={result} />
+
+      {isBousaiSeason && <BousaiNotice />}
 
       <FamilySizeSelector value={familySize} onChange={handleFamilySizeChange} />
 

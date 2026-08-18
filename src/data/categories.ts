@@ -16,4 +16,5 @@ export const categories: Category[] = [
   { id: "coffee", name: "コーヒー", icon: "☕" },
   { id: "alcohol", name: "お酒", icon: "🍶" },
   { id: "wine", name: "ワイン", icon: "🍷" },
+  { id: "disaster-prep", name: "防災・備蓄", icon: "🎒" },
 ];

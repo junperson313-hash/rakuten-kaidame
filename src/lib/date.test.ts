@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getJstParts, getNextGotobiDate, isGotobiDay, jstDateToInstant } from "./date";
+import { getJstParts, getNextGotobiDate, isBousaiSeason, isGotobiDay, jstDateToInstant } from "./date";
 
 describe("isGotobiDay", () => {
   it("5と0のつく日(5,10,15,20,25,30)を正しくtrueと判定する", () => {
@@ -77,5 +77,23 @@ describe("getJstParts / jstDateToInstant", () => {
     expect(parts.year).toBe(2026);
     expect(parts.month).toBe(8);
     expect(parts.day).toBe(17);
+  });
+});
+
+describe("isBousaiSeason", () => {
+  it("8/25〜8/31は防災の日シーズンと判定する", () => {
+    expect(isBousaiSeason({ year: 2026, month: 8, day: 25 })).toBe(true);
+    expect(isBousaiSeason({ year: 2026, month: 8, day: 31 })).toBe(true);
+  });
+
+  it("9/1〜9/7は防災の日シーズンと判定する", () => {
+    expect(isBousaiSeason({ year: 2026, month: 9, day: 1 })).toBe(true);
+    expect(isBousaiSeason({ year: 2026, month: 9, day: 2 })).toBe(true);
+    expect(isBousaiSeason({ year: 2026, month: 9, day: 7 })).toBe(true);
+  });
+
+  it("シーズン外(8/17, 9/8)はfalseになる", () => {
+    expect(isBousaiSeason({ year: 2026, month: 8, day: 17 })).toBe(false);
+    expect(isBousaiSeason({ year: 2026, month: 9, day: 8 })).toBe(false);
   });
 });

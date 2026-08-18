@@ -75,3 +75,9 @@ export function getNextGotobiDate(today: CalendarDate): CalendarDate {
   const nextYear = today.month === 12 ? today.year + 1 : today.year;
   return { year: nextYear, month: nextMonth, day: 5 };
 }
+
+// 9月1日「防災の日」前後(8/25〜9/7)かどうか。楽天のキャンペーンとは無関係の、
+// 備蓄を見直すきっかけとして案内するための判定であり、買い時判定には影響させない。
+export function isBousaiSeason(today: CalendarDate): boolean {
+  return (today.month === 8 && today.day >= 25) || (today.month === 9 && today.day <= 7);
+}

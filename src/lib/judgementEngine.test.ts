@@ -15,18 +15,18 @@ describe("computeOverallJudgement（確認済みキャンペーン未登録時�
     date: [number, number, number];
     expectGotobi: boolean;
     expectKansha: boolean;
+    expectWonderful: boolean;
     expectLevel: "buy" | "depends" | "wait";
   }[] = [
-    { label: "8/5", date: [2026, 8, 5], expectGotobi: true, expectKansha: false, expectLevel: "depends" },
-    { label: "8/10", date: [2026, 8, 10], expectGotobi: true, expectKansha: false, expectLevel: "depends" },
-    { label: "8/17", date: [2026, 8, 17], expectGotobi: false, expectKansha: false, expectLevel: "wait" },
-    { label: "8/18", date: [2026, 8, 18], expectGotobi: false, expectKansha: true, expectLevel: "depends" },
-    { label: "8/20", date: [2026, 8, 20], expectGotobi: true, expectKansha: false, expectLevel: "depends" },
-    { label: "8/25", date: [2026, 8, 25], expectGotobi: true, expectKansha: false, expectLevel: "depends" },
-    { label: "8/30", date: [2026, 8, 30], expectGotobi: true, expectKansha: false, expectLevel: "depends" },
-    { label: "8/31", date: [2026, 8, 31], expectGotobi: false, expectKansha: false, expectLevel: "wait" },
-    { label: "9/1", date: [2026, 9, 1], expectGotobi: false, expectKansha: false, expectLevel: "wait" },
-    { label: "9/5", date: [2026, 9, 5], expectGotobi: true, expectKansha: false, expectLevel: "depends" },
+    { label: "8/17", date: [2026, 8, 17], expectGotobi: false, expectKansha: false, expectWonderful: false, expectLevel: "wait" },
+    { label: "8/18", date: [2026, 8, 18], expectGotobi: false, expectKansha: true, expectWonderful: false, expectLevel: "depends" },
+    { label: "8/20", date: [2026, 8, 20], expectGotobi: true, expectKansha: false, expectWonderful: false, expectLevel: "depends" },
+    { label: "8/25", date: [2026, 8, 25], expectGotobi: true, expectKansha: false, expectWonderful: false, expectLevel: "depends" },
+    { label: "8/30", date: [2026, 8, 30], expectGotobi: true, expectKansha: false, expectWonderful: false, expectLevel: "depends" },
+    { label: "8/31", date: [2026, 8, 31], expectGotobi: false, expectKansha: false, expectWonderful: false, expectLevel: "wait" },
+    { label: "9/1", date: [2026, 9, 1], expectGotobi: false, expectKansha: false, expectWonderful: true, expectLevel: "depends" },
+    { label: "9/2", date: [2026, 9, 2], expectGotobi: false, expectKansha: false, expectWonderful: false, expectLevel: "wait" },
+    { label: "9/5", date: [2026, 9, 5], expectGotobi: true, expectKansha: false, expectWonderful: false, expectLevel: "depends" },
   ];
 
   for (const c of cases) {
@@ -34,6 +34,7 @@ describe("computeOverallJudgement（確認済みキャンペーン未登録時�
       const result = computeOverallJudgement(jst(...c.date), NO_CAMPAIGNS);
       expect(result.isGotobi).toBe(c.expectGotobi);
       expect(result.isKanshaDay).toBe(c.expectKansha);
+      expect(result.isWonderfulDay).toBe(c.expectWonderful);
       expect(result.level).toBe(c.expectLevel);
     });
   }
@@ -47,6 +48,18 @@ describe("computeOverallJudgement（確認済みキャンペーン未登録時�
     const result = computeOverallJudgement(jst(2026, 8, 17), NO_CAMPAIGNS);
     expect(result.activeCampaigns).toHaveLength(0);
     expect(result.level).toBe("wait");
+  });
+
+  it("18日は単独では『買い』にならず、会員ランク条件を含む理由文になる", () => {
+    const result = computeOverallJudgement(jst(2026, 8, 18), NO_CAMPAIGNS);
+    expect(result.level).toBe("depends");
+    expect(result.reason).toContain("ゴールド");
+  });
+
+  it("1日は単独では『買い』にならず、エントリー条件を含む理由文になる", () => {
+    const result = computeOverallJudgement(jst(2026, 9, 1), NO_CAMPAIGNS);
+    expect(result.level).toBe("depends");
+    expect(result.reason).toContain("3,000円");
   });
 });
 
@@ -109,6 +122,34 @@ describe("getActiveCampaigns / computeOverallJudgement（キャンペーンあ�
       },
     ];
     const result = computeOverallJudgement(jst(2026, 8, 20), campaigns);
+    expect(result.level).toBe("buy");
+  });
+
+  it("確認済みキャンペーン開催中 かつ 18日(ご愛顧感謝デー) が重なると『買い』になる", () => {
+    const campaigns: RakutenCampaign[] = [
+      {
+        id: "marathon",
+        name: "お買い物マラソン",
+        start: "2026-08-16T00:00:00+09:00",
+        end: "2026-08-20T23:59:59+09:00",
+        verified: true,
+      },
+    ];
+    const result = computeOverallJudgement(jst(2026, 8, 18), campaigns);
+    expect(result.level).toBe("buy");
+  });
+
+  it("確認済みキャンペーン開催中 かつ 1日(ワンダフルデー) が重なると『買い』になる", () => {
+    const campaigns: RakutenCampaign[] = [
+      {
+        id: "marathon",
+        name: "お買い物マラソン",
+        start: "2026-08-30T00:00:00+09:00",
+        end: "2026-09-02T23:59:59+09:00",
+        verified: true,
+      },
+    ];
+    const result = computeOverallJudgement(jst(2026, 9, 1), campaigns);
     expect(result.level).toBe("buy");
   });
 });
