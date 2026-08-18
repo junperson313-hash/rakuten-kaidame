@@ -24,7 +24,7 @@ export const products: Product[] = [
       "3-4": "12ロール×2〜3袋",
       "5plus": "12ロール×4〜5袋",
     },
-    affiliateUrl: "#",
+    affiliateUrl: "https://a.r10.to/hPTCYq",
   },
   {
     id: "tissue",
