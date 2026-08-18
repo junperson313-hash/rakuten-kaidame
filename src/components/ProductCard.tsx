@@ -2,6 +2,7 @@
 
 import { judgementMap, stars } from "@/lib/judgement";
 import { getProductJudgement } from "@/lib/productJudgement";
+import { buildRakutenAffiliateUrl } from "@/lib/affiliate";
 import { trackEvent } from "@/lib/analytics";
 import type { FamilySize, OverallJudgementLevel, Product } from "@/types";
 
@@ -16,6 +17,10 @@ interface Props {
 
 export default function ProductCard({ product, familySize, overallLevel, rank }: Props) {
   const judgement = judgementMap[getProductJudgement(product.priority, overallLevel)];
+  const linkUrl =
+    product.affiliateUrl && product.affiliateUrl !== "#"
+      ? product.affiliateUrl
+      : buildRakutenAffiliateUrl(product.searchKeyword ?? product.name);
 
   const handleCardClick = () => {
     trackEvent("product_click", { item_id: product.id, item_name: product.name });
@@ -78,7 +83,7 @@ export default function ProductCard({ product, familySize, overallLevel, rank }:
         </div>
 
         <a
-          href={product.affiliateUrl}
+          href={linkUrl}
           target="_blank"
           rel="noopener noreferrer sponsored"
           onClick={handleAffiliateClick}

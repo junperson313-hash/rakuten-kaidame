@@ -66,7 +66,11 @@ export interface Product {
   stockPeriod: string; // 買いだめ目安（例: "2〜3か月分"）
   topRank?: number; // TOP3表示用の順位（未設定なら対象外）
   familyGuide: Record<FamilySize, string>;
-  affiliateUrl: string;
+  // 検索キーワード。未指定ならnameを使う。楽天アフィリエイトIDと組み合わせて
+  // 自動でアフィリエイトリンクを生成するため、通常は指定不要。
+  searchKeyword?: string;
+  // 特定の商品ページへの実リンクを使いたい場合のみ指定する（省略時は検索リンクを自動生成）。
+  affiliateUrl?: string;
 }
 
 export interface Category {

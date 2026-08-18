@@ -1,7 +1,9 @@
 import type { Product } from "@/types";
 
 // 商品を増やす場合はこの配列にオブジェクトを追加するだけでOK。
-// affiliateUrl は現在プレースホルダー("#")。楽天アフィリエイトリンク発行後にここを書き換える。
+// リンクは NEXT_PUBLIC_RAKUTEN_AFFILIATE_ID を設定すると自動でアフィリエイトリンクになるため、
+// 通常は affiliateUrl を指定する必要はない(検索キーワードは name を使う)。
+// 特定の商品ページに固定したい場合のみ affiliateUrl に実URLを指定する(例: トイレットペーパー)。
 export const products: Product[] = [
   {
     id: "toilet-paper",
@@ -45,7 +47,6 @@ export const products: Product[] = [
       "3-4": "5箱パック×2〜3",
       "5plus": "5箱パック×3",
     },
-    affiliateUrl: "#",
   },
   {
     id: "laundry-detergent",
@@ -67,7 +68,6 @@ export const products: Product[] = [
       "3-4": "詰め替え×3〜4個",
       "5plus": "詰め替え×5個以上",
     },
-    affiliateUrl: "#",
   },
   {
     id: "dish-detergent",
@@ -88,7 +88,6 @@ export const products: Product[] = [
       "3-4": "詰め替え×2〜3個",
       "5plus": "詰め替え×3〜4個",
     },
-    affiliateUrl: "#",
   },
   {
     id: "shampoo",
@@ -110,7 +109,6 @@ export const products: Product[] = [
       "3-4": "詰め替え×2〜3個",
       "5plus": "詰め替え×3個以上",
     },
-    affiliateUrl: "#",
   },
   {
     id: "body-soap",
@@ -131,7 +129,6 @@ export const products: Product[] = [
       "3-4": "詰め替え×2〜3個",
       "5plus": "詰め替え×3個以上",
     },
-    affiliateUrl: "#",
   },
   {
     id: "water",
@@ -152,7 +149,6 @@ export const products: Product[] = [
       "3-4": "2Lケース×2〜3",
       "5plus": "2Lケース×3以上",
     },
-    affiliateUrl: "#",
   },
   {
     id: "rice",
@@ -173,7 +169,6 @@ export const products: Product[] = [
       "3-4": "10kg×1〜2",
       "5plus": "10kg×2以上",
     },
-    affiliateUrl: "#",
   },
   {
     id: "diaper",
@@ -195,7 +190,6 @@ export const products: Product[] = [
       "3-4": "パック×2〜3(月齢・お子様の人数に応じて調整)",
       "5plus": "パック×2〜3(月齢・お子様の人数に応じて調整)",
     },
-    affiliateUrl: "#",
   },
   {
     id: "pet",
@@ -216,7 +210,6 @@ export const products: Product[] = [
       "3-4": "ペットの頭数に応じて1〜2か月分が目安",
       "5plus": "ペットの頭数に応じて1〜2か月分が目安",
     },
-    affiliateUrl: "#",
   },
   {
     id: "snacks",
@@ -237,7 +230,6 @@ export const products: Product[] = [
       "3-4": "5〜8袋",
       "5plus": "8袋以上",
     },
-    affiliateUrl: "#",
   },
   {
     id: "coffee",
@@ -258,7 +250,6 @@ export const products: Product[] = [
       "3-4": "200g×3〜4袋",
       "5plus": "200g×4袋以上",
     },
-    affiliateUrl: "#",
   },
   {
     id: "alcohol",
@@ -279,7 +270,6 @@ export const products: Product[] = [
       "3-4": "350ml×24〜48本(1〜2ケース)",
       "5plus": "350ml×48本以上(2ケース以上)",
     },
-    affiliateUrl: "#",
   },
   {
     id: "wine",
@@ -300,7 +290,6 @@ export const products: Product[] = [
       "3-4": "3〜4本",
       "5plus": "4〜6本",
     },
-    affiliateUrl: "#",
   },
   // 防災・備蓄カテゴリ。価格・賞味期限・保存年数は商品によって異なるため、
   // 固定値で断定せず「商品表示を確認」という案内にとどめている。
@@ -323,7 +312,6 @@ export const products: Product[] = [
       "3-4": "2L×18〜24本程度",
       "5plus": "2L×24本以上",
     },
-    affiliateUrl: "#",
   },
   {
     id: "emergency-food",
@@ -345,7 +333,6 @@ export const products: Product[] = [
       "3-4": "数日分×3〜4人分",
       "5plus": "数日分×5人以上分",
     },
-    affiliateUrl: "#",
   },
   {
     id: "emergency-toilet",
@@ -366,7 +353,6 @@ export const products: Product[] = [
       "3-4": "数日分×3〜4人分",
       "5plus": "数日分×5人以上分",
     },
-    affiliateUrl: "#",
   },
   {
     id: "dry-batteries",
@@ -387,7 +373,6 @@ export const products: Product[] = [
       "3-4": "単三・単四各20〜30本程度",
       "5plus": "単三・単四各30本以上",
     },
-    affiliateUrl: "#",
   },
   {
     id: "power-bank",
@@ -408,7 +393,6 @@ export const products: Product[] = [
       "3-4": "2台程度",
       "5plus": "2台以上",
     },
-    affiliateUrl: "#",
   },
   {
     id: "gas-canister",
@@ -429,7 +413,6 @@ export const products: Product[] = [
       "3-4": "6〜12本程度",
       "5plus": "12本以上",
     },
-    affiliateUrl: "#",
   },
   {
     id: "flashlight",
@@ -450,7 +433,6 @@ export const products: Product[] = [
       "3-4": "2〜3個",
       "5plus": "3個以上",
     },
-    affiliateUrl: "#",
   },
   {
     id: "wet-wipes",
@@ -471,6 +453,5 @@ export const products: Product[] = [
       "3-4": "数パック",
       "5plus": "数パック(多めに)",
     },
-    affiliateUrl: "#",
   },
 ];
